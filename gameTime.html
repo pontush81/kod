@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Game Time Calculator</title>
+	   <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+
+        h1 {
+            text-align: center;
+            margin: 10px 0;
+        }
+
+        #gameTimeForm {
+            background-color: #fff;
+            padding: 100px;
+            border-radius: 5px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-top: 50px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        #countdown {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        #speladTid {
+            font-size: 28px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Game Time Calculator</h1>
+    <form id="gameTimeForm">
+        <label for="matchensSpeltid">Periodens speltid (mm:ss):</label>
+        <input type="text" id="matchensSpeltid" value="15:00" placeholder="e.g., 15:00">
+        <br>
+		<br>
+        <label for="currentGameTime">Tid på tavlan (mm:ss):</label>
+        <input type="text" id="currentGameTime" value="00:00" placeholder="e.g., 05:30">
+		<br>
+		<br>
+        <div id="countdown">
+            Spelad tid: <span id="speladTid">00:00</span>
+        </div>
+    </form>
+
+    <script>
+        let matchensSpeltid = 15 * 60; // Default matchens speltid in seconds
+        let currentGameTime = 0;
+
+        document.getElementById("matchensSpeltid").addEventListener("input", function() {
+            matchensSpeltid = parseTimeToSeconds(this.value);
+            updatePlayedTime();
+        });
+
+        document.getElementById("currentGameTime").addEventListener("input", function() {
+            currentGameTime = parseTimeToSeconds(this.value);
+            updatePlayedTime();
+        });
+
+        function parseTimeToSeconds(timeString) {
+            const [minutes, seconds] = timeString.split(':').map(part => parseInt(part));
+            return (minutes * 60) + seconds;
+        }
+
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = seconds % 60;
+            return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
+        }
+
+        function updatePlayedTime() {
+            const playedTime = matchensSpeltid - currentGameTime;
+            const formattedPlayedTime = formatTime(playedTime);
+            document.getElementById("speladTid").textContent = formattedPlayedTime;
+        }
+
+        // Initialize the played time on page load
+        updatePlayedTime();
+    </script>
+</body>
+</html>
